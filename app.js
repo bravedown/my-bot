@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token } = require('./config/bot-config.json');
+const db = require('./models');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -71,4 +72,8 @@ client.on('message', message => {
 	}
 });
 
-client.login(token);
+db.sequelize.sync({ force: false }).then(() => {
+	console.log("Synced/connected database and models");
+	client.login(token).catch(err => console.log(err));
+});
+

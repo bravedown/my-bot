@@ -6,10 +6,23 @@ const db = require('./models');
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+function getFiles (dir, files_){
+    files_ = files_ || [];
+    let files = fs.readdirSync(dir);
+    for (let i in files){
+        let name = dir + '/' + files[i];
+        if (fs.statSync(name).isDirectory()){
+            getFiles(name, files_);
+        } else {
+            files_.push(name);
+        }
+    }
+    return files_;
+}
+const commandFiles = getFiles('./commands');
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
+	const command = require(file);
 	client.commands.set(command.name, command);
 }
 

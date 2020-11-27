@@ -1,13 +1,15 @@
 module.exports = function(sequelize, DataTypes) {
     const DMonInv = sequelize.define("DMonInv", {
-      quantity: DataTypes.INTEGER,
+      quantity: {
+          type: DataTypes.INTEGER,
+          defaultValue: 1
+      }
     },
     {
       timestamps: false
     });
 
     DMonInv.associate = models => {
-        console.log(models);
         DMonInv.belongsTo(models.Discordmon, {
             foreignKey: {
                 allowNull: false

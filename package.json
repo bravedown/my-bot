@@ -20,7 +20,7 @@
   "homepage": "https://github.com/bravedown/my-bot#readme",
   "dependencies": {
     "discord.js": "^12.4.1",
-    "mysql2": "^2.2.5",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0"
   }
 }

@@ -3,8 +3,10 @@ const Discord = require('discord.js');
 const { prefix, token } = require('./config/bot-config.json');
 const db = require('./models');
 
-const client = new Discord.Client();
+const intents = new Discord.Intents([Discord.Intents.NON_PRIVILEGED, 'GUILD_MEMBERS']);
+const client = new Discord.Client({ws: {intents}});
 client.commands = new Discord.Collection();
+
 
 function getFiles (dir, files_){
     files_ = files_ || [];
@@ -30,9 +32,14 @@ const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
 	console.log('Ready!');
+	console.log(client.guilds.cache.get('491475507649445888').members.fetch().then(res => console.log('done')));
 });
 
 client.on('message', message => {
+	let dmonRoll = Math.floor(Math.random() * 10);
+	if (dmonRoll === 0 && !message.author.bot) {
+		client.commands.get('spawn').execute(message, 0);
+	}
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);

@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-    const DiscordMon = sequelize.define("Discordmon", {
+    const DMonRequest = sequelize.define("DMonRequest", {
       name: {
         allowNull: false,
         type: DataTypes.STRING
@@ -13,7 +13,10 @@ module.exports = function(sequelize, DataTypes) {
     {
       timestamps: false
     });
-    return DiscordMon;
+    DMonRequest.associate = models => {
+        DMonRequest.belongsTo(models.User, {})
+    };
+    return DMonRequest;
 };
 
   

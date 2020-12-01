@@ -2,8 +2,8 @@ const db = require("../../models");
 module.exports = {
 	name: 'spawn',
     description: 'Spawn a random dmon!',
-	execute(message, args) {
-        if (message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR')) {
+	execute(message, args, mult = 1) {
+        if (message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR') || args === 'override') {
             db.Discordmon.findAll().then(res => {
                 const rarities = {
                     common: {
@@ -48,7 +48,10 @@ module.exports = {
                     }
                 }
                 let chosenDMon = rarities[chosenRarity].values[Math.floor(Math.random() * rarities[chosenRarity].values.length)].dataValues;
-                let messageStr = `a${/[aeiou]/i.test(chosenDMon.rarity[0]) ? 'n' : ''} ${chosenDMon.rarity} ${chosenDMon.name} has appeared! React with 🤗 to be their friend! Be quick, before someone else reacts first!`;
+                let amount = mult > 1 ? mult
+                    :/[aeiou]/i.test(chosenDMon.rarity[0]) ? 'an'
+                    :'a';
+                let messageStr = `${amount} ${chosenDMon.rarity} ${chosenDMon.name}${mult > 1 ? "'s have" : ' has'} appeared! React with 🤗 to be their friend! Be quick, before someone else reacts first!`;
                 const files = chosenDMon.imgLink ? {files: [chosenDMon.imgLink]} : {};
                 message.reply(messageStr, files).then(reply => {
                     reply.react('🤗');
@@ -62,16 +65,16 @@ module.exports = {
                         .then(collected => {
                             db.User.create({id: reactUser.id}).then(res => {
                                 console.log('New user added to db.');
-                                require('../../functions/catch-dmon')(reactUser.id, chosenDMon.id);
+                                require('../../functions/catch-dmon')(reactUser.id, chosenDMon.id, mult);
                             }).catch(err => {
                                 console.log('User already exists in db.');
-                                require('../../functions/catch-dmon')(reactUser.id, chosenDMon.id);
+                                require('../../functions/catch-dmon')(reactUser.id, chosenDMon.id, mult);
                             })
-                            reply.edit(`<@${reactUser.id}>, you are now friends with ${chosenDMon.rarity} ${chosenDMon.name}! ${reactUser.id !== message.author.id ? 'YOINK!' : ''}`, files);
+                            reply.edit(`<@${reactUser.id}>, you are now friends with ${mult > 1 ? mult + ' ' : ''}${chosenDMon.rarity} ${chosenDMon.name}! ${reactUser.id !== message.author.id ? 'YOINK!' : ''}`, files);
                         })
                         .catch(collected => {
                             console.log(`Nobody reacted :(`);
-                            reply.edit(`Nobody wanted to be friends with ${chosenDMon.rarity} ${chosenDMon.name} 😢`, files);
+                            reply.edit(`Nobody wanted to be friends with ${mult > 1 ? mult + ' ' : ''}${chosenDMon.rarity} ${chosenDMon.name} 😢`, files);
                         });
                 });
             });

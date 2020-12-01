@@ -14,7 +14,8 @@ module.exports = {
             res.forEach(e => {
                 let {name, rarity, imgLink} = e.dataValues.Discordmon;
                 let quantity = e.dataValues.quantity;
-                msgStr += `\n\`${rarity} ${name}\` x${quantity}${imgLink ? ', ' + imgLink : ''}`
+                if (quantity > 0)
+                    msgStr += `\n\`${rarity} ${name}\` x${quantity}${imgLink ? ', ' + imgLink : ''}`
             })
             message.channel.send(msgStr);
         });

@@ -1,5 +1,5 @@
 const db = require('../models');
-module.exports = function(userId, dMonId) {
+module.exports = function(userId, dMonId, quantity) {
     db.DMonInv.findAll({
         where: {
             UserId: userId,
@@ -8,7 +8,7 @@ module.exports = function(userId, dMonId) {
     }).then(res => {
         if (res.length > 0) {
             db.DMonInv.update({
-                quantity: res[0].dataValues.quantity + 1
+                quantity: +res[0].dataValues.quantity + quantity
             }, {
                 where: {
                     id: res[0].dataValues.id
@@ -17,7 +17,8 @@ module.exports = function(userId, dMonId) {
         } else {
             db.DMonInv.create({
                 UserId: userId,
-                DiscordmonId: dMonId
+                DiscordmonId: dMonId,
+                quantity: quantity
             })
         }
     })

@@ -4,7 +4,7 @@ module.exports = {
     description: 'Add dmon to db.',
     args: true,
 	execute(message, args) {
-        if (message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR')) 
+        if (!message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR')) 
             return message.reply('You do not have permission!');
         if (typeof args[1] === 'string') args[1] = args[1].toUpperCase();
         console.log(args[1]);
@@ -34,11 +34,10 @@ module.exports = {
                         rarity: args[1],
                     });
                 }
+                message.reply('added!');
                 break;
             default: 
                 message.reply("Please use the proper syntax and pick a valid rarity!\nProper syntax: `!add-dmon <name> <rarity> <link-to-img>`\nValid rarities: `common, uncommon, rare, epic, legendary, mythic`")
-        }
-		
-        message.reply("YEP COCK");
+        }		
 	},
 };

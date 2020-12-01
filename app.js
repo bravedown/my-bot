@@ -32,16 +32,15 @@ const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
 	console.log('Ready!');
-	console.log(client.guilds.cache.get('491475507649445888').members.fetch().then(res => console.log('done')));
+	console.log(client.guilds.cache.get('640011810363408424').members.fetch().then(res => console.log('done')));
 });
 
-client.on('message', message => {
-	let dmonRoll = Math.floor(Math.random() * 10);
-	if (dmonRoll === 0 && !message.author.bot) {
-		client.commands.get('spawn').execute(message, 0);
-	}
+client.on('message', message => {	
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
-
+	let dmonRoll = Math.floor(Math.random() * 10);
+	if (dmonRoll === 0 && !message.author.bot && message.channel.type !== 'dm') {
+		client.commands.get('spawn').execute(message, 'override');
+	}
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 

@@ -1,4 +1,5 @@
 const db = require("../../models");
+const rarities = require('../../config/rarities.json');
 module.exports = {
 	name: 'add-dmon',
     description: 'Add dmon to db.',
@@ -6,38 +7,15 @@ module.exports = {
 	execute(message, args) {
         if (!message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR')) 
             return message.reply('You do not have permission!');
-        if (typeof args[1] === 'string') args[1] = args[1].toUpperCase();
-        console.log(args[1]);
-        switch(args[1]) {
-            case 'COMMON':
-            case 'UNCOMMON':
-            case 'RARE':
-            case 'EPIC':
-            case 'LEGENDARY':
-            case 'MYTHIC':
-                if (typeof args[2] === 'string') {
-                    if (args[2].substring(0, 5) === 'https') {
-                        db.Discordmon.create({
-                            name: args[0],
-                            rarity: args[1],
-                            imgLink: args[2]
-                        })
-                    } else {
-                        db.Discordmon.create({
-                            name: args[0],
-                            rarity: args[1],
-                        });
-                    }
-                } else {
-                    db.Discordmon.create({
-                        name: args[0],
-                        rarity: args[1],
-                    });
-                }
-                message.reply('added!');
-                break;
-            default: 
-                message.reply("Please use the proper syntax and pick a valid rarity!\nProper syntax: `!add-dmon <name> <rarity> <link-to-img>`\nValid rarities: `common, uncommon, rare, epic, legendary, mythic`")
-        }		
+        let [name, rarity, imgLink] = args;
+        if (rarity) rarity = rarity.toUpperCase();
+        if (rarity in rarities) {
+            db.Discordmon.create({
+                name: name,
+                rarity: rarity,
+                imgLink: imgLink
+            });
+            message.reply('added!');
+        } else message.reply("Please use the proper syntax and pick a valid rarity!\nProper syntax: `!add-dmon <name> <rarity> <link-to-img>`\nValid rarities: `common, uncommon, rare, epic, legendary, mythic`");	
 	},
 };

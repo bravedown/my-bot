@@ -18,8 +18,8 @@ module.exports = {
                 .setColor('#0099ff')
                 .setTitle(`${username}'s Inventory`);
             res.forEach(e => {
-                let {name, rarity, imgLink} = e.dataValues.Discordmon;
-                let quantity = e.dataValues.quantity;
+                let {name, rarity, imgLink} = e.Discordmon;
+                let quantity = e.quantity;
                 if (quantity > 0)
                     embed.addField(`${name} x${quantity}`, `[${rarity}](${imgLink})`, true).setImage(imgLink);
             })

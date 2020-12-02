@@ -8,8 +8,8 @@ module.exports = {
             where: {
                 UserId: message.author.id
             }
-        }).then(rows => {
-            message.reply(`deleted ${rows} rows`);
+        }).then(res => {
+            message.reply(`inventory cleared!`);
         });
 	},
 };

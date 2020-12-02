@@ -8,6 +8,10 @@ module.exports = function(sequelize, DataTypes) {
       money: {
         type: DataTypes.INTEGER,
         defaultValue: 0
+      },
+      yoinks: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
       }
     },
     {

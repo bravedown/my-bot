@@ -1,4 +1,6 @@
+const Sequelize = require("sequelize");
 const db = require("../../models");
+// const rarities = require('../../config/rarities.json');
 module.exports = {
 	name: 'spawn',
     description: 'Spawn a random dmon!',
@@ -8,26 +10,30 @@ module.exports = {
                 const rarities = {
                     common: {
                         values: res.filter(el => el.dataValues.rarity === 'COMMON'),
-                        weight: 30
+                        weight: 300
                     }, 
                     uncommon: {
                         values: res.filter(el => el.dataValues.rarity === 'UNCOMMON'),
-                        weight: 20
+                        weight: 200
                     }, 
                     rare: {
                         values: res.filter(el => el.dataValues.rarity === 'RARE'),
-                        weight: 10
+                        weight: 100
                     }, 
                     epic: {
                         values: res.filter(el => el.dataValues.rarity === 'EPIC'),
-                        weight: 6
+                        weight: 60
                     }, 
                     legendary: {
                         values: res.filter(el => el.dataValues.rarity === 'LEGENDARY'),
-                        weight: 3
+                        weight: 30
                     }, 
                     mythic: {
                         values: res.filter(el => el.dataValues.rarity === 'MYTHIC'),
+                        weight: 10
+                    },
+                    ultramythic: {
+                        values: res.filter(el => el.dataValues.rarity === 'ULTRAMYTHIC'),
                         weight: 1
                     }
                 };
@@ -70,7 +76,9 @@ module.exports = {
                                 console.log('User already exists in db.');
                                 require('../../functions/catch-dmon')(reactUser.id, chosenDMon.id, mult);
                             })
-                            reply.edit(`<@${reactUser.id}>, you are now friends with ${mult > 1 ? mult + ' ' : ''}${chosenDMon.rarity} ${chosenDMon.name}! ${reactUser.id !== message.author.id ? 'YOINK!' : ''}`, files);
+                            let isYoink = reactUser.id !== message.author.id;
+                            if (isYoink) db.User.update({yoinks: Sequelize.literal('yoinks + 1')}, {where: {id: reactUser.id}})
+                            reply.edit(`<@${reactUser.id}>, you are now friends with ${mult > 1 ? mult + ' ' : ''}${chosenDMon.rarity} ${chosenDMon.name}! ${isYoink ? 'YOINK!' : ''}`, files);
                         })
                         .catch(collected => {
                             console.log(`Nobody reacted :(`);
@@ -81,48 +89,5 @@ module.exports = {
         } else {
             message.reply("You don't have permission to use this command.");
         }
-        // message.reply("YEP").then(reply => {
-        //     reply.react('🤗');
-        //     const filter = (reaction, user) => {
-        //         return ['🤗'].includes(reaction.emoji.name) && !user.bot;
-        //     };
-            
-        //     reply.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-        //         .then(collected => {
-        //             console.log(collected.users.cache);
-        //             const reaction = collected.first();
-            
-        //             if (reaction.emoji.name === '🤗') {
-        //                 reply.reply('you reacted with a thumbs up.');
-        //             } else {
-        //                 reply.reply('you reacted with a thumbs down.');
-        //             }
-        //         })
-        //         .catch(collected => {
-        //             console.log(`After a minute, only ${collected.size} out of 4 reacted.`);
-        //             reply.reply('you didn\'t react with neither a thumbs up, nor a thumbs down.');
-        //         });
-        // });
 	},
 };
-
-// message.react('👍').then(() => message.react('👎'));
-
-// const filter = (reaction, user) => {
-//     return ['👍', '👎'].includes(reaction.emoji.name);
-// };
-
-// message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-//     .then(collected => {
-//         const reaction = collected.first();
-
-//         if (reaction.emoji.name === '👍') {
-//             message.reply('you reacted with a thumbs up.');
-//         } else {
-//             message.reply('you reacted with a thumbs down.');
-//         }
-//     })
-//     .catch(collected => {
-//         console.log(`After a minute, only ${collected.size} out of 4 reacted.`);
-//         message.reply('you didn\'t react with neither a thumbs up, nor a thumbs down.');
-//     });

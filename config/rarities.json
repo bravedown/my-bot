@@ -1,0 +1,37 @@
+{
+    "common": {
+        "weight": 300,
+        "value": 1,
+        "price": 1
+    },
+    "uncommon": {
+        "weight": 200,
+        "value": 2,
+        "price": 2
+    },
+    "rare": {
+        "weight": 100,
+        "value": 3,
+        "price": 5
+    },
+    "epic": {
+        "weight": 60,
+        "value": 4,
+        "price": 10
+    },
+    "legendary": {
+        "weight": 30,
+        "value": 5,
+        "price": 25
+    },
+    "mythic": {
+        "weight": 10,
+        "value": 10,
+        "price": 50
+    },
+    "ultramythic": {
+        "weight": 1,
+        "value": 100,
+        "price": false
+    }
+}

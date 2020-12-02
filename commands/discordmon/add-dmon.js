@@ -16,6 +16,11 @@ module.exports = {
                 imgLink: imgLink
             });
             message.reply('added!');
-        } else message.reply("Please use the proper syntax and pick a valid rarity!\nProper syntax: `!add-dmon <name> <rarity> <link-to-img>`\nValid rarities: `common, uncommon, rare, epic, legendary, mythic`");	
-	},
+        } else {
+            let raritiesStr = '';
+            for (let prop in rarities) raritiesStr += prop + ', ';
+            raritiesStr = raritiesStr.substring(0, raritiesStr.length - 2);
+            message.reply(`Please use the proper syntax and pick a valid rarity!\nProper syntax: \`!add-dmon <name> <rarity> <link-to-img>\`\nValid rarities: \`${raritiesStr}\``);	
+        }
+    },
 };

@@ -1,4 +1,5 @@
 const db = require("../../models");
+const rarities = require('../../config/rarities.json');
 module.exports = {
 	name: 'gamble',
     description: 'Gamble away a discordmon, 40% of the time a brand new discordmon will spawn!',
@@ -27,27 +28,7 @@ module.exports = {
                     if (quantity - number >= 0) {
                         let randNum = Math.random();
                         if (randNum < 1/3) {
-                            let spawnMultiplier;
-                            switch (rarity) {
-                                case 'COMMON': 
-                                    spawnMultiplier = 1;
-                                    break;
-                                case 'UNCOMMON': 
-                                    spawnMultiplier = 2;
-                                    break;
-                                case 'RARE': 
-                                    spawnMultiplier = 3;
-                                    break;
-                                case 'EPIC': 
-                                    spawnMultiplier = 4;
-                                    break;
-                                case 'LEGENDARY': 
-                                    spawnMultiplier = 5;
-                                    break;
-                                case 'MYTHIC': 
-                                    spawnMultiplier = 10;
-                                    break;
-                            }
+                            let spawnMultiplier = rarities[rarity].value;
                             require('./spawn').execute(message, 'override', spawnMultiplier * number);
                         } else {
                             message.reply("you weren't lucky this time.")

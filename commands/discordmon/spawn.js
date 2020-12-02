@@ -1,45 +1,16 @@
 const Sequelize = require("sequelize");
 const db = require("../../models");
-// const rarities = require('../../config/rarities.json');
+const rarities = require('../../config/rarities.json');
 module.exports = {
 	name: 'spawn',
     description: 'Spawn a random dmon!',
 	execute(message, args, mult = 1) {
         if (message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR') || args === 'override') {
             db.Discordmon.findAll().then(res => {
-                const rarities = {
-                    common: {
-                        values: res.filter(el => el.dataValues.rarity === 'COMMON'),
-                        weight: 300
-                    }, 
-                    uncommon: {
-                        values: res.filter(el => el.dataValues.rarity === 'UNCOMMON'),
-                        weight: 200
-                    }, 
-                    rare: {
-                        values: res.filter(el => el.dataValues.rarity === 'RARE'),
-                        weight: 100
-                    }, 
-                    epic: {
-                        values: res.filter(el => el.dataValues.rarity === 'EPIC'),
-                        weight: 60
-                    }, 
-                    legendary: {
-                        values: res.filter(el => el.dataValues.rarity === 'LEGENDARY'),
-                        weight: 30
-                    }, 
-                    mythic: {
-                        values: res.filter(el => el.dataValues.rarity === 'MYTHIC'),
-                        weight: 10
-                    },
-                    ultramythic: {
-                        values: res.filter(el => el.dataValues.rarity === 'ULTRAMYTHIC'),
-                        weight: 1
-                    }
-                };
                 let cats = [];
                 let pos = 0;
                 for (let prop in rarities) {
+                    rarities[prop].values = res.filter(el => el.dataValues.rarity === prop);
                     if (rarities[prop].values.length > 0) {
                         pos += rarities[prop].weight;
                         cats.push([prop, pos]);

@@ -6,8 +6,7 @@ module.exports = {
 	execute(message, args) {
         db.User.findOne({where:{id: message.author.id}})
             .then(res => {
-                let { yoinks } = res;
-                message.reply(`you have ${yoinks} yoinks!`);
+                message.reply(`you have ${res.yoinks} yoinks!`);
             })
             .catch(err => {
                 message.reply('something went wrong.');

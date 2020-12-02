@@ -36,11 +36,13 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {	
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-	let dmonRoll = Math.floor(Math.random() * 10);
-	if (dmonRoll === 0 && !message.author.bot && message.channel.type !== 'dm') {
-		client.commands.get('spawn').execute(message, 'override');
+	if (!message.content.startsWith(prefix) || message.author.bot) {
+		let dmonRoll = Math.floor(Math.random() * 10);
+		if (dmonRoll === 0 && !message.author.bot && message.channel.type !== 'dm') 
+			client.commands.get('spawn').execute(message, 'override');
+		return;
 	}
+	
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
@@ -69,7 +71,7 @@ client.on('message', message => {
 
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
+	const cooldownAmount = (command.cooldown || 0) * 1000;
 
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;

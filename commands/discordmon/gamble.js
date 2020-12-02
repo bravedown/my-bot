@@ -2,9 +2,13 @@ const db = require("../../models");
 module.exports = {
 	name: 'gamble',
     description: 'Gamble away a discordmon, 40% of the time a brand new discordmon will spawn!',
+    cooldown: 0,
+    args: true,
 	execute(message, args) {
         let [rarity, name] = args;
+        rarity = rarity.toUpperCase();
         let number = args[2] || 1;
+        number = Math.floor(number);
         db.Discordmon.findAll({
             where: {
                 name: name,
@@ -18,50 +22,48 @@ module.exports = {
                     DiscordmonId: dMonId
                 }
             }).then(resp => {
-                console.log(resp);
                 if (resp.length > 0) {
                     let {id, quantity} = resp[0].dataValues;
-                    if (quantity > -1 + number) {
-                        return db.DMonInv.update({
-                            quantity: quantity - number
-                        }, {
-                            where: {
-                                id: id
+                    if (quantity - number >= 0) {
+                        let randNum = Math.random();
+                        if (randNum < 1/3) {
+                            let spawnMultiplier;
+                            switch (rarity) {
+                                case 'COMMON': 
+                                    spawnMultiplier = 1;
+                                    break;
+                                case 'UNCOMMON': 
+                                    spawnMultiplier = 2;
+                                    break;
+                                case 'RARE': 
+                                    spawnMultiplier = 3;
+                                    break;
+                                case 'EPIC': 
+                                    spawnMultiplier = 4;
+                                    break;
+                                case 'LEGENDARY': 
+                                    spawnMultiplier = 5;
+                                    break;
+                                case 'MYTHIC': 
+                                    spawnMultiplier = 10;
+                                    break;
                             }
-                        }).then(response => {
-                            let randNum = Math.random();
-                            if (randNum < 1/3) {
-                                let spawnMultiplier;
-                                switch (rarity) {
-                                    case 'COMMON': 
-                                        spawnMultiplier = 1;
-                                        break;
-                                    case 'UNCOMMON': 
-                                        spawnMultiplier = 2;
-                                        break;
-                                    case 'RARE': 
-                                        spawnMultiplier = 3;
-                                        break;
-                                    case 'EPIC': 
-                                        spawnMultiplier = 4;
-                                        break;
-                                    case 'LEGENDARY': 
-                                        spawnMultiplier = 5;
-                                        break;
-                                    case 'MYTHIC': 
-                                        spawnMultiplier = 6;
-                                        break;
+                            require('./spawn').execute(message, 'override', spawnMultiplier * number);
+                        } else {
+                            message.reply("you weren't lucky this time.")
+                            db.DMonInv.update({
+                                quantity: quantity - number
+                            }, {
+                                where: {
+                                    id: id
                                 }
-                                require('./spawn').execute(message, 'override', spawnMultiplier * number);
-                            } else {
-                                message.reply("you weren't lucky this time.")
-                            }
-                        })
+                            })
+                        }
+                        return;
                     } 
                 } 
-                message.reply(`you don't have any ${rarity} ${name}'s.`)
+                message.reply(`you don't have enough ${rarity} ${name}'s.`)
             })
         })
-        
 	},
 };

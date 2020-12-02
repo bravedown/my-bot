@@ -1,7 +1,8 @@
 const db = require("../../models");
 module.exports = {
 	name: 'request-dmon',
-	description: 'Request a new d-mon to be approved by an admin!\nSyntax: `-request-dmon <name> <rarity: common, uncommon, rare, epic, legendary, mythic> <imgLink (optional)>`',
+    description: 'Request a new d-mon to be approved by an admin!\nSyntax: `-request-dmon <name> <rarity: common, uncommon, rare, epic, legendary, mythic> <imgLink (optional)>`',
+    args: true,
 	execute(message, args) {
 		db.DMonRequest.create({
             name: args[0],

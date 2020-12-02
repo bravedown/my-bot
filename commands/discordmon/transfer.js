@@ -12,7 +12,7 @@ module.exports = {
             }
         }).then(res => {
             if (res.length === 0) return;
-            let dMonId = res[0].dataValues.id;
+            let dMonId = res[0].id;
             db.DMonInv.findAll({
                 where: {
                     UserId: message.author.id,
@@ -20,7 +20,7 @@ module.exports = {
                 }
             }).then(resp => {
                 if (resp.length === 0) return;
-                let ownedQuantity = resp[0].dataValues.quantity;
+                let ownedQuantity = resp[0].quantity;
                 if (ownedQuantity >= quantityToTransfer) {
                     db.DMonInv.update({quantity: ownedQuantity - quantityToTransfer}, {
                         where: {
@@ -33,16 +33,6 @@ module.exports = {
                     })
                 }
             })
-        })
-        let userId = message.mentions.users.first().id;
-        db.DMonInv.findAll({
-            where: {
-                UserId: message.author.id,
-            },
-            include: [db.Discordmon]
-        }).then(res => {
-            if (res.length === 0) return;
-            res.dataValues.quantity
         });
 	},
 };

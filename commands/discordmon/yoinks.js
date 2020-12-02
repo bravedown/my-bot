@@ -11,6 +11,6 @@ module.exports = {
             })
             .catch(err => {
                 message.reply('something went wrong.');
-            })
+            });
 	},
 };

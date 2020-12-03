@@ -9,7 +9,6 @@ function getInventoryValue(id) {
             .then(res => {
                 let valueSum = 0;
                 res.forEach(e => {
-                    console.log(e);
                     valueSum += rarities[e.Discordmon.rarity].value * e.quantity;
                 });
                 resolve(valueSum);

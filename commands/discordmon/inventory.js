@@ -1,5 +1,5 @@
 const db = require("../../models");
-const Discord = require('discord.js');
+const MessageEmbed = require('discord.js').MessageEmbed;
 const getInventoryValue = require('../../functions/inv-value');
 const getYoinks = require('../../functions/get-yoinks');
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
             include: [db.Discordmon]
         }).then(res => {
             let {username} = message.guild.members.cache.get(userId).user;
-            let embed = new Discord.MessageEmbed()
+            let embed = new MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle(`${username}'s Inventory`);
             res.forEach(e => {
@@ -27,7 +27,7 @@ module.exports = {
             });
             getInventoryValue(userId).then(value => {
             getYoinks(userId).then(yoinks => {
-                embed.setFooter(`Value: ${value} Yoinks: ${yoinks}`)
+                embed.setFooter(`Value: ${value}         Yoinks: ${yoinks}`)
                 message.channel.send(embed).then(reply => {
                     if (!persistMessage) reply.delete({timeout: 60000});
                 });

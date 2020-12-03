@@ -5,7 +5,7 @@ module.exports = {
 	execute(message, args) {
         db.DMonInv.update({quantity: 0}, {where: {UserId: message.author.id}})
             .then(res => {
-                message.reply(`inventory cleared!`);
+                message.reply(`inventory cleared.`);
             });
 	},
 };

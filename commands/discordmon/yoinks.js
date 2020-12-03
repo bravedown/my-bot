@@ -1,15 +1,15 @@
 const db = require("../../models");
+const getYoinks = require('../../functions/get-yoinks');
 module.exports = {
 	name: 'yoinks',
     description: 'Check your yoinks.',
     aliases: ['yoink'],
 	execute(message, args) {
-        db.User.findOne({where:{id: message.author.id}})
-            .then(res => {
-                message.reply(`you have ${res.yoinks} yoinks!`);
-            })
+        getYoinks(message.author.id)
+            .then(yoinks => message.reply(yoinks))
             .catch(err => {
-                message.reply('something went wrong.');
+                console.log(err);
+                message.reply('there was an error.');
             });
 	},
 };

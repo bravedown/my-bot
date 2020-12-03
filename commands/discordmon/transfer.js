@@ -6,6 +6,7 @@ module.exports = {
     args: true,
 	execute(message, args) {
         let [rarity, name, quantityToTransfer] = args.slice(1);
+        if (!quantityToTransfer) quantityToTransfer = 1;
         db.Discordmon.findOne({
             where: {
                 rarity: rarity,

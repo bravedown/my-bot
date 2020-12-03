@@ -1,6 +1,7 @@
 const db = require("../../models");
 const Discord = require('discord.js');
 const getInventoryValue = require('../../functions/inv-value');
+const getYoinks = require('../../functions/get-yoinks');
 module.exports = {
 	name: 'inventory',
     description: 'Check your dmon inventory. Mention someone to get their inventory instead! Add `persist` to the command if you don\'t want the inventory to auto-delete.',
@@ -25,12 +26,12 @@ module.exports = {
                     embed.addField(`${name} x${quantity}`, `[${rarity}](${imgLink})`, true).setImage(imgLink);
             });
             getInventoryValue(userId).then(value => {
-                embed.setFooter(`Value: ${value}`)
+            getYoinks(userId).then(yoinks => {
+                embed.setFooter(`Value: ${value} Yoinks: ${yoinks}`)
                 message.channel.send(embed).then(reply => {
                     if (!persistMessage) reply.delete({timeout: 60000});
                 });
-            })
-            
+            })});
         });
 	},
 };

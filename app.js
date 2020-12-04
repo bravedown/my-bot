@@ -32,14 +32,19 @@ const cooldowns = new Discord.Collection();
 
 client.once('ready', () => {
 	console.log('Ready!');
-	console.log(client.guilds.cache.get('640011810363408424').members.fetch().then(res => console.log('done')));
+	// This should be configured to your guild
+	client.guilds.cache.get('640011810363408424').members.fetch().then(res => console.log('done'));
 });
 
 client.on('message', message => {	
 	if (!message.content.startsWith(prefix) || message.author.bot) {
-		let dmonRoll = Math.floor(Math.random() * 10);
-		if (dmonRoll === 0 && !message.author.bot && message.channel.type !== 'dm') 
-			client.commands.get('spawn').execute(message, 'override');
+		let dmonRoll = Math.random();
+		if (dmonRoll < 0.1 && !message.author.bot && message.channel.type !== 'dm') {
+			let mult = 1;
+			if (dmonRoll < 0.001) mult *= 10;
+			if (dmonRoll < 0.0001) mult *= 5;
+			client.commands.get('spawn').execute(message, 'override', mult);
+		}
 		return;
 	}
 	

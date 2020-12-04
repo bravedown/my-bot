@@ -1,5 +1,5 @@
 node_modules
 package-lock.json
-config.json
-bot-config.json
-database.sqlite
+# config.json
+# bot-config.json
+# database.sqlite

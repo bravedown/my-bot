@@ -3,6 +3,12 @@ const Discord = require('discord.js');
 const { prefix, token } = require('./config/bot-config.json');
 const db = require('./models');
 
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 8080;
+app.get('*', (req, res) => res.end('hello'));
+app.listen(PORT, () => console.log('listening on port ' + PORT));
+
 const intents = new Discord.Intents([Discord.Intents.NON_PRIVILEGED, 'GUILD_MEMBERS']);
 const client = new Discord.Client({ws: {intents}});
 client.commands = new Discord.Collection();

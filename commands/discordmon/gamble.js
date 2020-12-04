@@ -11,6 +11,7 @@ module.exports = {
 	execute(message, args) {
         let [rarity, name] = args;
         if (rarity.toLowerCase() == 'all') {
+            if (message.author.id == '305242561885503488') return message.reply('nice try Aqua!');
             getInventoryValue(message.author.id).then(value => {
                 let randNum = Math.random();
                 if (randNum < 0.5) {
@@ -24,13 +25,13 @@ module.exports = {
         rarity = rarity.toUpperCase();
         let number = args[2] || 1;
         number = Math.floor(number);
-        db.Discordmon.findAll({
+        db.Discordmon.findOne({
             where: {
                 name: name,
                 rarity: rarity
             }
         }).then(res => {
-            let dMonId = res[0].dataValues.id;
+            let dMonId = res.id;
             db.DMonInv.findAll({
                 where: {
                     UserId: message.author.id,

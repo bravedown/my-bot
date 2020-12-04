@@ -1,25 +1,9 @@
 {
-  "development": {
+  "production": {
     "username": "test_user",
     "password": "password",
     "database": "discord",
     "dialect": "sqlite",
     "storage": "database.sqlite"
-  },
-  "test": {
-    "username": "test_user",
-    "password": "password",
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "test_user",
-    "password": "password",
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "dialect": "mysql"
   }
 }

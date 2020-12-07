@@ -2,7 +2,7 @@ module.exports = {
 	name: 'prune',
 	description: 'Prune up to 99 messages.',
 	execute(message, args) {
-		if (message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR')) 
+		if (!message.guild.members.cache.get(message.author.id).hasPermission('ADMINISTRATOR')) 
             return message.reply('You do not have permission!');
 		const amount = parseInt(args[0]) + 1;
 
